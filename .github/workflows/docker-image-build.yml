@@ -26,6 +26,7 @@ jobs:
         password: ${{ secrets.cdbPAT }}
 
     - name: Build and push images
+    # The shell script below has an issue as the git diffs (especially HEAD~1) are throwing an error so the image will always be rebuilt and pushed
       run: |
         for dockerfile in $(find . -name Dockerfile); do
           dir_of_image=$(dirname "$dockerfile")

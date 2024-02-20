@@ -1,6 +1,6 @@
 ARG TF_VERSION=2.8.4
 
-FROM --platform=linux/aarch64 tensorflow/tensorflow:${TF_VERSION} as builder
+FROM --platform=linux/aarch64 tensorflow/tensorflow:${TF_VERSION} 
 
 # 
 
