@@ -15,6 +15,7 @@ app = FastAPI()
 @app.get("/")
 def read_root(res: Request):
 
+    some_bs_variable = ''
     
     res.headers
     # "SERVICE2_SERVICE_PORT"
