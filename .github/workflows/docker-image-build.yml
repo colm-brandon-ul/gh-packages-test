@@ -28,21 +28,22 @@ jobs:
     - name: Build and push images
       run: |
         for dockerfile in $(find . -name Dockerfile); do
-          dir=$(dirname "$dockerfile")
+          dir_of_image=$(dirname "$dockerfile")
+          echo "Building image in $dir_of_image"
           image_name=$(dirname "$dockerfile")
           image_name=${image_name//\//-}
           docker_image_name="cinco-de-bio-${image_name//[^a-zA-Z0-9]/-}"
 
           if git log --quiet --diff-filter=A HEAD~1..HEAD -- "$image_name"; then
             echo "$image_name is a newly added path"
-            docker build -t ghcr.io/${{ github.repository_owner }}/$docker_image_name:latest -f $dockerfile dir
+            docker build -t ghcr.io/${{ github.repository_owner }}/$docker_image_name:latest -f $dockerfile $dir_of_image
             docker push ghcr.io/${{ github.repository_owner }}/$docker_image_name:latest
           else
             echo "$image_name is not a newly added path"
             if git diff --quiet HEAD HEAD~1 -- "$image_name"; then
               echo "No changes in $image_name, skipping build"
             else
-              docker build -t ghcr.io/${{ github.repository_owner }}/$docker_image_name:latest -f $dockerfile dir
+              docker build -t ghcr.io/${{ github.repository_owner }}/$docker_image_name:latest -f $dockerfile $dir_of_image
               docker push ghcr.io/${{ github.repository_owner }}/$docker_image_name:latest
             fi
           fi
