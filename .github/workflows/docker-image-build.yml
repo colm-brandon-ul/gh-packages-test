@@ -3,6 +3,8 @@ name: Build and Push Docker Images
 on:
   pull_request:
     types: [closed]
+    branches:
+      - main
 
 jobs:
   build:
