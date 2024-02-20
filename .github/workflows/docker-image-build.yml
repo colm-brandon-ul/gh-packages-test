@@ -30,10 +30,11 @@ jobs:
         for dockerfile in $(find . -name Dockerfile); do
           image_name=$(dirname "$dockerfile")
           image_name=${image_name//\//-}
-          if git diff --quiet HEAD HEAD~1 "$image_name"; then
+          docker_image_name="cinco-de-bio-${image_name//[^a-zA-Z0-9]/-}"
+          if git diff --quiet HEAD HEAD~1 -- "$image_name"; then
             echo "No changes in $image_name, skipping build"
           else
-            docker build -t ghcr.io/${{ github.repository_owner }}/${image_name//[^a-zA-Z0-9]/-}:latest -f $dockerfile .
-            docker push ghcr.io/${{ github.repository_owner }}/${image_name//[^a-zA-Z0-9]/-}:latest
+            docker build -t ghcr.io/${{ github.repository_owner }}/$docker_image_name:latest -f $dockerfile .
+            docker push ghcr.io/${{ github.repository_owner }}/$docker_image_name:latest
           fi
         done
